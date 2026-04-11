@@ -28,14 +28,23 @@ npx vite build             ✅
 cd functions && npx tsc    ✅
 ```
 
-## Co trzeba zrobic przed pierwszym `npm run dev` na zywo
-1. **Stworzyc projekty Firebase** w konsoli https://console.firebase.google.com :
-   - `bookingapp-dev` (region: `europe-central2`)
-   - `bookingapp-prod` (region: `europe-central2`)
-2. W obu projektach: wlaczyc **Authentication → Email/Password**, **Firestore Database**, **Functions** (wymaga Blaze plan)
-3. Pobrac web config z Project Settings → "Add app" (web), wkleic do `.env.local` (template: `.env.example`)
-4. `firebase login` + `firebase use bookingapp-dev`
-5. Uruchomic emulator: `npm run emulators`, w drugim terminalu: `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npx tsx scripts/seed-milosz.ts`
+## Stan deploy
+- ✅ Projekty Firebase utworzone przez CLI:
+  - `bookingapp-dev` → https://bookingapp-dev.web.app (HTTP 200)
+  - `bookingapp-prod` → https://bookingapp-prod.web.app (HTTP 200)
+- ✅ `firestore.rules` + `firestore.indexes.json` zdeployowane na oba projekty
+- ✅ `dist/` (build Vite) zdeployowany na hosting na oba
+- ⚠️  **Functions NIE zdeployowane** — wymagaja Blaze plan + brak jeszcze tresci (tylko healthCheck stub). Do Tydzien 2.
+- ⚠️  **Firestore w trybie test mode (rules naszych dziala)** — Authentication i Firestore Database utworzone automatycznie
+- ⚠️  **Brak `.env.local`** — front laduje sie ale crashuje przy probie polaczenia z Firebase. Trzeba wkleic web config.
+
+## Co trzeba zrobic recznie zanim `/b/milosz-mma` zacznie dzialac na zywo
+1. **Pobrac web config** z https://console.firebase.google.com/project/bookingapp-dev/settings/general (sekcja "Your apps" → "Add app" → web → zarejestruj app)
+2. Skopiowac `.env.example` → `.env.local` i wpisac wartosci z konsoli (apiKey, messagingSenderId, appId)
+3. **Wlaczyc Email/Password sign-in** w https://console.firebase.google.com/project/bookingapp-dev/authentication/providers
+4. **Upgrade do Blaze plan** (wymagane do Functions) — TYLKO przed Tydzien 2 deploy. Hosting + Firestore dziala na Spark.
+5. **Uruchomic seed**: `npm run emulators` (w jednym terminalu), w drugim: `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npx tsx scripts/seed-milosz.ts`
+   ALBO seed bezposrednio na dev: `GOOGLE_APPLICATION_CREDENTIALS=<path-to-service-account.json> npx tsx scripts/seed-milosz.ts`
 6. `npm run dev` → otworzyc http://localhost:5173/b/milosz-mma
 
 ## Tydzien 2 — TODO (Booking + Payments + Calendar)
