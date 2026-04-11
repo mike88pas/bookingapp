@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "default": "bookingapp-dev",
+    "dev": "bookingapp-dev",
+    "prod": "bookingapp-prod"
+  }
+}

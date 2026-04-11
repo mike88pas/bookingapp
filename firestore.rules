@@ -1,0 +1,89 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function myRole() {
+      return get(/databases/$(database)/documents/roles/$(request.auth.uid)).data;
+    }
+
+    function isSuperAdmin() {
+      return isSignedIn() && myRole().role == 'super_admin';
+    }
+
+    function isTenantMember(tid) {
+      return isSignedIn() &&
+             myRole().tenantId == tid &&
+             (myRole().role == 'trainer' || myRole().role == 'tenant_admin');
+    }
+
+    function sameTenant(tid) {
+      return request.resource.data.tenantId == tid;
+    }
+
+    // Public tenant metadata (read-all, write-tenant)
+    match /tenants/{tenantId} {
+      allow read: if true;
+      allow write: if isSuperAdmin() || isTenantMember(tenantId);
+    }
+
+    match /trainers/{id} {
+      allow read: if true;
+      allow write: if isSuperAdmin() || isTenantMember(resource.data.tenantId);
+    }
+
+    match /services/{id} {
+      allow read: if true;
+      allow write: if isTenantMember(resource.data.tenantId);
+    }
+
+    match /availability/{id} {
+      allow read: if true;
+      allow write: if isTenantMember(resource.data.tenantId);
+    }
+
+    match /availabilityExceptions/{id} {
+      allow read: if true;
+      allow write: if isTenantMember(resource.data.tenantId);
+    }
+
+    match /bookings/{id} {
+      allow read: if isTenantMember(resource.data.tenantId)
+                  || (isSignedIn() && resource.data.clientId == request.auth.uid);
+      allow create: if sameTenant(request.resource.data.tenantId)
+                    && request.resource.data.status == 'pending_payment';
+      allow update: if isTenantMember(resource.data.tenantId);
+      allow delete: if false;
+    }
+
+    match /packages/{id} {
+      allow read: if isTenantMember(resource.data.tenantId);
+      allow write: if isTenantMember(resource.data.tenantId);
+    }
+
+    match /vouchers/{id} {
+      allow read: if isTenantMember(resource.data.tenantId);
+      allow create: if sameTenant(request.resource.data.tenantId)
+                    && request.resource.data.status == 'pending_payment';
+      allow update, delete: if false; // functions-only
+    }
+
+    match /clients/{id} {
+      allow read: if isTenantMember(resource.data.tenantId);
+      allow write: if isTenantMember(resource.data.tenantId);
+    }
+
+    match /payments/{id} {
+      allow read: if isTenantMember(resource.data.tenantId);
+      allow write: if false; // functions-only
+    }
+
+    match /roles/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow write: if isSuperAdmin();
+    }
+  }
+}
