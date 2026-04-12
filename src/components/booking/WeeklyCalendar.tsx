@@ -1,3 +1,4 @@
+import { motion } from 'motion/react';
 import type { ComputedSlot } from '@/lib/slots';
 
 const DAY_NAMES = ['Nd', 'Pon', 'Wt', 'Sr', 'Czw', 'Pt', 'Sob'];
@@ -29,7 +30,7 @@ export function WeeklyCalendar({
 
   if (slotsByDate.length === 0) {
     return (
-      <div className="rounded-2xl border border-white/10 bg-white/5 p-6 text-center text-sm text-white/60">
+      <div className="border border-white/[0.06] bg-white/[0.02] p-8 text-center text-sm text-white/40">
         Brak dostepnych terminow w wybranym okresie.
       </div>
     );
@@ -40,22 +41,37 @@ export function WeeklyCalendar({
       <div
         className="grid gap-2"
         style={{
-          gridTemplateColumns: `repeat(${slotsByDate.length}, minmax(120px, 1fr))`,
+          gridTemplateColumns: `repeat(${slotsByDate.length}, minmax(110px, 1fr))`,
         }}
       >
-        {slotsByDate.map((day) => (
-          <div
+        {/* Day headers */}
+        {slotsByDate.map((day, i) => (
+          <motion.div
             key={day.date}
-            className="text-center py-2 bg-white/5 rounded-t-lg"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: i * 0.06, duration: 0.35 }}
+            className="text-center py-3 bg-white/[0.03] border-b border-white/[0.06]"
           >
-            <div className="text-xs text-white/60">{day.dayName}</div>
-            <div className="text-lg font-bold text-white">{day.dayNum}</div>
-            <div className="text-xs text-white/60">{day.month}</div>
-          </div>
+            <div className="text-[10px] uppercase tracking-[0.15em] text-white/40">
+              {day.dayName}
+            </div>
+            <div className="text-lg font-display font-bold text-white">
+              {day.dayNum}
+            </div>
+            <div className="text-[10px] text-white/30">{day.month}</div>
+          </motion.div>
         ))}
 
-        {slotsByDate.map((day) => (
-          <div key={`slots-${day.date}`} className="space-y-1">
+        {/* Slot columns */}
+        {slotsByDate.map((day, colIdx) => (
+          <motion.div
+            key={`slots-${day.date}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: colIdx * 0.06 + 0.2, duration: 0.3 }}
+            className="space-y-1"
+          >
             {day.slots.map((slot) => {
               const isSelected = selectedSlot?.id === slot.id;
               return (
@@ -63,19 +79,19 @@ export function WeeklyCalendar({
                   key={slot.id}
                   disabled={!slot.available}
                   onClick={() => onSelect(slot)}
-                  className={`w-full px-2 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`w-full px-2 py-2 text-xs font-medium transition-all duration-200 ${
                     isSelected
-                      ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/30'
+                      ? 'bg-brand-500 text-white shadow-lg shadow-brand-500/25'
                       : slot.available
-                        ? 'bg-emerald-500/10 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20'
-                        : 'bg-white/5 text-white/30 cursor-not-allowed line-through'
+                        ? 'bg-white/[0.03] text-emerald-400/80 border border-emerald-500/15 hover:bg-emerald-500/[0.08] hover:border-emerald-500/30'
+                        : 'bg-white/[0.01] text-white/20 cursor-not-allowed line-through'
                   }`}
                 >
                   {slot.startTime}
                 </button>
               );
             })}
-          </div>
+          </motion.div>
         ))}
       </div>
     </div>
