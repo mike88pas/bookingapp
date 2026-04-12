@@ -5,6 +5,7 @@ import { useTenant } from '@/hooks/useTenant';
 import { useAvailability } from '@/hooks/useAvailability';
 import { useBookings } from '@/hooks/useBookings';
 import { computeSlots, type ComputedSlot } from '@/lib/slots';
+import { createBookingAndCheckout } from '@/lib/booking';
 import { TenantHero } from '@/components/public/TenantHero';
 import { AchievementsList } from '@/components/public/AchievementsList';
 import { PartnerClubCard } from '@/components/public/PartnerClubCard';
@@ -13,6 +14,7 @@ import { ServicePicker } from '@/components/booking/ServicePicker';
 import { WeeklyCalendar } from '@/components/booking/WeeklyCalendar';
 import { BookingForm, type BookingFormValues } from '@/components/booking/BookingForm';
 import { LoadingSpinner } from '@/components/guards/LoadingSpinner';
+import { PackagePicker } from '@/components/packages/PackagePicker';
 import type { Service } from '@bookingapp/shared-types';
 
 function TenantContent({ slug }: { slug: string }) {
@@ -20,10 +22,9 @@ function TenantContent({ slug }: { slug: string }) {
   const trainer = trainers[0] ?? null;
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedSlot, setSelectedSlot] = useState<ComputedSlot | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [bookingError, setBookingError] = useState<string | null>(null);
 
-  const serviceList = selectedService
-    ? services
-    : services;
   const current = selectedService ?? services[0] ?? null;
 
   const { weekly, exceptions } = useAvailability(trainer?.id ?? null);
@@ -52,13 +53,31 @@ function TenantContent({ slug }: { slug: string }) {
     );
   }
 
-  const handleBookingSubmit = (_values: BookingFormValues) => {
-    // TODO Tydzien 2: utworz booking{pending_payment} + createCheckoutSession
-    console.log('TODO createCheckoutSession', {
-      tenantId: tenant.id,
-      service: current,
-      slot: selectedSlot,
-    });
+  const handleBookingSubmit = async (values: BookingFormValues) => {
+    if (!current || !selectedSlot || !trainer) return;
+    setSubmitting(true);
+    setBookingError(null);
+    try {
+      const sessionUrl = await createBookingAndCheckout({
+        tenantId: tenant.id,
+        trainerId: trainer.id,
+        trainerName: trainer.name,
+        serviceId: current.id,
+        serviceName: current.name,
+        servicePrice: current.price,
+        durationMin: current.durationMin,
+        slot: selectedSlot,
+        clientName: values.clientName,
+        clientEmail: values.clientEmail,
+        clientPhone: values.clientPhone,
+        notes: values.notes,
+      });
+      window.location.href = sessionUrl;
+    } catch (err) {
+      console.error('Booking error:', err);
+      setBookingError('Wystapil blad podczas tworzenia rezerwacji. Sprobuj ponownie.');
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -70,10 +89,18 @@ function TenantContent({ slug }: { slug: string }) {
       {tenant.partnerClub && <PartnerClubCard club={tenant.partnerClub} />}
       <GiftVoucherCTA tenantSlug={slug} />
 
+      {trainer && services.length > 0 && (
+        <PackagePicker
+          tenantId={tenant.id}
+          trainerId={trainer.id}
+          services={services}
+        />
+      )}
+
       <section className="space-y-4">
         <h2 className="text-2xl font-semibold text-white">Wybierz trening</h2>
         <ServicePicker
-          services={serviceList}
+          services={services}
           selectedId={(selectedService ?? current)?.id ?? null}
           onSelect={(s) => {
             setSelectedService(s);
@@ -93,10 +120,17 @@ function TenantContent({ slug }: { slug: string }) {
         </section>
       )}
 
+      {bookingError && (
+        <div className="bg-red-500/10 border border-red-500/30 rounded-xl px-4 py-3 text-sm text-red-300">
+          {bookingError}
+        </div>
+      )}
+
       {current && selectedSlot && (
         <BookingForm
           service={current}
           selectedSlot={selectedSlot}
+          submitting={submitting}
           onSubmit={handleBookingSubmit}
         />
       )}
