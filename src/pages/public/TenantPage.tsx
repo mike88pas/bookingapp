@@ -159,10 +159,17 @@ function TenantContent({ slug }: { slug: string }) {
       <section id="booking" className="bg-[#0b0b0b] py-20 md:py-28">
         <div className="max-w-6xl mx-auto px-6 md:px-12">
           <AnimatedSection direction="left">
+            <p className="text-xs uppercase tracking-[0.2em] text-brand-500/70 mb-3">
+              Rezerwacja online
+            </p>
             <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-white">
-              Zarezerwuj w{' '}
-              <span className="text-brand-500">60 sekund</span>
+              Termin w{' '}
+              <span className="text-gradient-brand">60 sekund</span>
             </h2>
+            <p className="mt-3 text-sm text-white/50 max-w-lg leading-relaxed normal-case tracking-normal">
+              Wybierz trening, kliknij termin, wpisz dane. Bez dzwonienia,
+              bez czekania. Potwierdzenie na email natychmiast.
+            </p>
           </AnimatedSection>
 
           <div className="mt-8">

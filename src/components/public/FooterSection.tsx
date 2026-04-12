@@ -7,39 +7,42 @@ interface FooterSectionProps {
 
 export function FooterSection({ onBookClick }: FooterSectionProps) {
   return (
-    <footer className="bg-[#050505] border-t border-white/[0.04] py-10">
+    <footer className="bg-[#050505] border-t border-white/[0.04] py-12">
       <div className="max-w-6xl mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          {/* Left */}
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+          {/* Left — branding */}
           <div className="text-center md:text-left">
-            <p className="font-display text-sm uppercase tracking-[0.15em] text-white/50">
-              Milosz Kornasiewicz &bull; Trener MMA &bull; Krosno
+            <p className="font-display text-base uppercase tracking-[0.1em] text-white/60">
+              Milosz Kornasiewicz
             </p>
-            <p className="text-[10px] text-white/20 mt-1">
-              Powered by bookingapp
+            <p className="text-xs text-white/30 mt-1">
+              Trener MMA &bull; Zawodnik QUEST MMA &bull; Krosno
+            </p>
+            <p className="text-[10px] text-white/15 mt-2">
+              &copy; 2026 &bull; Powered by bookingapp
             </p>
           </div>
 
           {/* Center — social */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <a
               href={SOCIAL_LINKS.instagram}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 text-xs text-white/30 hover:text-white/60 transition-colors"
+              className="flex items-center gap-2 text-xs text-white/30 hover:text-brand-400 transition-colors duration-300"
             >
               <Instagram className="w-4 h-4" />
-              @milosz_wp
+              Sledz na Instagramie
             </a>
           </div>
 
-          {/* Right — scroll to book */}
+          {/* Right — scroll CTA */}
           <button
             onClick={onBookClick}
-            className="flex items-center gap-2 text-xs uppercase tracking-wider text-brand-400 hover:text-brand-300 transition-colors"
+            className="group flex items-center gap-2 text-xs uppercase tracking-wider text-brand-400 hover:text-brand-300 transition-colors duration-300"
           >
-            Zarezerwuj trening
-            <ArrowUp className="w-3.5 h-3.5" />
+            Umow trening
+            <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
           </button>
         </div>
       </div>

@@ -79,11 +79,16 @@ export function PackagePicker({ tenantId, trainerId, services }: PackagePickerPr
     <section id="packages" className="bg-[#0d0d0d] py-20 md:py-28">
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         <AnimatedSection direction="left">
+          <p className="text-xs uppercase tracking-[0.2em] text-brand-500/70 mb-3">
+            Karnety
+          </p>
           <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-white">
-            Pakiety <span className="text-brand-500">treningowe</span>
+            Trenuj regularnie.{' '}
+            <span className="text-gradient-brand">Plac mniej.</span>
           </h2>
-          <p className="mt-3 text-sm text-white/40 uppercase tracking-wider">
-            Im wiecej trenujesz, tym mniej placisz.
+          <p className="mt-3 text-sm text-white/50 max-w-lg leading-relaxed normal-case tracking-normal">
+            Pakiet treningow z rabatem do 15%. Wazny 60 dni &mdash;
+            wystarczajaco dlugo, zebys zobaczyl efekty.
           </p>
         </AnimatedSection>
 

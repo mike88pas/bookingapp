@@ -97,7 +97,7 @@ export function HeroSection({
             {...fadeIn(0.4)}
             className="mt-4 text-lg md:text-xl uppercase tracking-[0.15em] text-white/40 font-display"
           >
-            {trainer?.role ?? 'Trener MMA | Zawodnik'}
+            Trener MMA &bull; Zawodnik QUEST MMA &bull; Krosno
           </motion.p>
 
           {/* Tagline */}
@@ -106,6 +106,14 @@ export function HeroSection({
             className="mt-6 text-base md:text-lg text-white/60 max-w-lg leading-relaxed"
           >
             {MILOSZ_TAGLINE}
+          </motion.p>
+
+          {/* Social proof line */}
+          <motion.p
+            {...fadeIn(0.6)}
+            className="mt-2 text-xs text-white/30"
+          >
+            Rekord 4-3 &bull; #13 w rankingu Polski &bull; Klub MMA Krosno od 2013
           </motion.p>
 
           {/* CTAs */}

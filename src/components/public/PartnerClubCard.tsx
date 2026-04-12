@@ -17,13 +17,15 @@ export function PartnerClubCard({ club }: { club: PartnerClub }) {
             )}
             <div className="flex-1">
               <p className="text-[10px] uppercase tracking-[0.2em] text-white/30">
-                Trenujemy w
+                Gdzie trenujemy
               </p>
               <h3 className="font-display text-xl uppercase font-bold text-white">
-                {club.name}{' '}
-                <span className="text-white/30 font-normal">&mdash; od 2013 roku</span>
+                {club.name}
               </h3>
-              <div className="mt-1 flex items-center text-xs text-white/40 gap-1">
+              <p className="text-xs text-white/40 mt-0.5">
+                Klub zal. 2013 przez Adama Tomasika. Tu sie zaczela moja droga.
+              </p>
+              <div className="mt-1.5 flex items-center text-xs text-white/30 gap-1">
                 <MapPin className="w-3.5 h-3.5" />
                 {club.address}
               </div>

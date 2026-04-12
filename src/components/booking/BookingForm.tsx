@@ -63,8 +63,11 @@ export function BookingForm({
         )}
 
         <h3 className="font-display text-xl uppercase tracking-wider text-white">
-          Twoje dane
+          Ostatni krok &mdash; Twoje dane
         </h3>
+        <p className="text-xs text-white/30 -mt-3">
+          Wpisz dane kontaktowe. Potwierdzenie przyjdzie na email.
+        </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
@@ -126,7 +129,7 @@ export function BookingForm({
           }
           className="w-full py-3.5 bg-brand-500 text-white uppercase text-sm tracking-[0.15em] font-semibold transition-all duration-200 hover:bg-brand-600 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-brand-500/20 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:shadow-none"
         >
-          {submitting ? 'Przekierowuje do platnosci...' : 'Rezerwuj i zaplac'}
+          {submitting ? 'Przekierowuje do platnosci...' : 'Potwierdzam \u2014 rezerwuje trening'}
         </button>
       </form>
     </AnimatedSection>

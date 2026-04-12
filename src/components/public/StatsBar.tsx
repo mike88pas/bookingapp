@@ -4,10 +4,10 @@ import { Swords, Target, Flame, Clock } from 'lucide-react';
 import { CountUp } from '@/components/ui/CountUp';
 
 const stats = [
-  { icon: Swords, value: 4, prefix: '', suffix: '-3', label: 'REKORD' },
-  { icon: Target, value: 13, prefix: '#', suffix: ' PL', label: 'RANKING' },
-  { icon: Flame, value: 7, prefix: '', suffix: '', label: 'WALK' },
-  { icon: Clock, value: 5, prefix: '', suffix: '+', label: 'LAT' },
+  { icon: Swords, value: 4, prefix: '', suffix: '-3', label: 'REKORD MMA' },
+  { icon: Target, value: 13, prefix: '#', suffix: '', label: 'W RANKINGU PL' },
+  { icon: Flame, value: 7, prefix: '', suffix: '', label: 'WALK W KLATCE' },
+  { icon: Clock, value: 5, prefix: '', suffix: '+', label: 'LAT NA MACIE' },
 ];
 
 export function StatsBar() {
