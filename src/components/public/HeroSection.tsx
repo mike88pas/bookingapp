@@ -1,6 +1,8 @@
 import { motion } from 'motion/react';
 import { ChevronDown, Shield, Award, Instagram } from 'lucide-react';
 import { MILOSZ_TAGLINE, RECORD_SUMMARY, SOCIAL_LINKS } from '@/lib/milosz-data';
+import { ParticleField } from '@/components/ui/ParticleField';
+import { GradientOrbs } from '@/components/ui/GradientOrbs';
 import type { Tenant, TrainerProfile } from '@bookingapp/shared-types';
 
 interface HeroSectionProps {
@@ -10,16 +12,18 @@ interface HeroSectionProps {
   onAboutClick: () => void;
 }
 
+const ease = [0.25, 0.1, 0.25, 1] as [number, number, number, number];
+
 const fadeIn = (delay: number) => ({
   initial: { opacity: 0, y: 30 },
   animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+  transition: { duration: 0.6, delay, ease },
 });
 
 const slideLeft = (delay: number) => ({
   initial: { opacity: 0, x: -50 },
   animate: { opacity: 1, x: 0 },
-  transition: { duration: 0.6, delay, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] },
+  transition: { duration: 0.6, delay, ease },
 });
 
 export function HeroSection({
@@ -31,27 +35,35 @@ export function HeroSection({
   const record = `${RECORD_SUMMARY.wins}-${RECORD_SUMMARY.losses}`;
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#080808]">
-      {/* Background decorations */}
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-[#080808] scan-line">
+      {/* Gradient orbs (Apple-style ambient glow) */}
+      <GradientOrbs />
+
+      {/* Canvas particle network */}
       <div className="absolute inset-0">
-        {/* Diagonal gradient accent */}
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-brand-500/[0.04] via-transparent to-transparent" />
+        <ParticleField />
+      </div>
+
+      {/* Background decorations */}
+      <div className="absolute inset-0 pointer-events-none">
         {/* Octagon decoration */}
         <div className="absolute top-1/2 right-[10%] -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] octagon-outline border-2 border-brand-500/[0.06] opacity-50" />
         {/* Giant record number */}
-        <div className="absolute top-1/2 right-[5%] -translate-y-1/2 select-none pointer-events-none">
+        <div className="absolute top-1/2 right-[5%] -translate-y-1/2 select-none">
           <span className="text-[180px] md:text-[280px] font-display font-bold text-white/[0.02] leading-none">
             {record}
           </span>
         </div>
         {/* Dot grid */}
         <div
-          className="absolute inset-0 opacity-[0.03]"
+          className="absolute inset-0 opacity-[0.025]"
           style={{
             backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)',
             backgroundSize: '32px 32px',
           }}
         />
+        {/* Horizontal line accent */}
+        <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-500/[0.08] to-transparent" />
       </div>
 
       {/* Content */}
@@ -59,19 +71,22 @@ export function HeroSection({
         <div className="max-w-2xl">
           {/* Badge */}
           <motion.div {...slideLeft(0.1)}>
-            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-brand-500/30 rounded text-[11px] uppercase tracking-[0.2em] text-brand-400 font-medium">
+            <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-brand-500/30 bg-brand-500/[0.06] backdrop-blur-sm rounded text-[11px] uppercase tracking-[0.2em] text-brand-400 font-medium">
               <Award className="w-3.5 h-3.5" />
               QUEST MMA &bull; #13 w Polsce
             </span>
           </motion.div>
 
-          {/* Name */}
+          {/* Name with gradient text */}
           <motion.h1
             {...slideLeft(0.25)}
-            className="mt-6 font-display text-5xl sm:text-6xl md:text-8xl font-bold uppercase leading-[0.9] tracking-tight text-white"
+            className="mt-6 font-display text-5xl sm:text-6xl md:text-8xl font-bold uppercase leading-[0.9] tracking-tight"
           >
             {name.split(' ').map((word, i) => (
-              <span key={i} className="block">
+              <span
+                key={i}
+                className={`block ${i === 1 ? 'text-gradient-animate' : 'text-white'}`}
+              >
                 {word}
               </span>
             ))}
@@ -97,13 +112,15 @@ export function HeroSection({
           <motion.div {...fadeIn(0.7)} className="mt-8 flex flex-wrap gap-4">
             <button
               onClick={onBookClick}
-              className="px-8 py-3.5 bg-brand-500 text-white uppercase text-sm tracking-[0.15em] font-semibold rounded transition-all duration-200 hover:bg-brand-600 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brand-500/20"
+              className="group relative px-8 py-3.5 bg-brand-500 text-white uppercase text-sm tracking-[0.15em] font-semibold rounded transition-all duration-300 hover:bg-brand-600 hover:scale-[1.03] active:scale-[0.98] shadow-lg shadow-brand-500/25 hover:shadow-xl hover:shadow-brand-500/35"
             >
-              Zarezerwuj trening
+              <span className="relative z-10">Zarezerwuj trening</span>
+              {/* Button glow */}
+              <div className="absolute inset-0 rounded bg-brand-500 blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
             </button>
             <button
               onClick={onAboutClick}
-              className="px-8 py-3.5 border border-white/15 text-white/70 uppercase text-sm tracking-[0.15em] font-medium rounded transition-all duration-200 hover:bg-white/[0.04] hover:text-white"
+              className="px-8 py-3.5 border border-white/15 bg-white/[0.03] backdrop-blur-sm text-white/70 uppercase text-sm tracking-[0.15em] font-medium rounded transition-all duration-300 hover:bg-white/[0.06] hover:text-white hover:border-white/25"
             >
               Poznaj mnie &darr;
             </button>
@@ -122,7 +139,7 @@ export function HeroSection({
               href={SOCIAL_LINKS.instagram}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-1.5 hover:text-white/50 transition-colors"
+              className="flex items-center gap-1.5 hover:text-brand-400 transition-colors duration-300"
             >
               <Instagram className="w-3.5 h-3.5" />
               @milosz_wp
@@ -136,9 +153,10 @@ export function HeroSection({
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
       >
-        <ChevronDown className="w-5 h-5 text-white/20 animate-bounce" />
+        <span className="text-[9px] uppercase tracking-[0.2em] text-white/20">Scrolluj</span>
+        <ChevronDown className="w-4 h-4 text-white/20 animate-bounce" />
       </motion.div>
     </section>
   );

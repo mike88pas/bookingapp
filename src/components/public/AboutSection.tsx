@@ -11,7 +11,7 @@ export function AboutSection() {
           <h2 className="font-display text-3xl md:text-5xl font-bold uppercase tracking-tight text-white">
             Nie tylko trener.
             <br />
-            <span className="text-brand-500">Zawodnik.</span>
+            <span className="text-gradient-animate">Zawodnik.</span>
           </h2>
         </AnimatedSection>
 
