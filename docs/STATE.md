@@ -1,101 +1,97 @@
 # bookingapp — Stan projektu
 
-**Ostatnia aktualizacja:** 2026-04-11
-**Faza:** Phase 1 MVP, koniec **Tydzien 1 — Foundation**
+**Ostatnia aktualizacja:** 2026-04-12
+**Faza:** Phase 1 MVP — koniec **Tydzien 2** + **CAGE redesign**
 
-## Co dziala
-- ✅ Repo zainicjalizowane, npm workspaces (`./`, `packages/shared-types/`, `functions/`)
-- ✅ Vite 7 + React 19 + TS 5.9 + Tailwind v4 + RRv7 (build OK, 587 KB → 184 KB gzip)
-- ✅ Pelny data model w `packages/shared-types/src/index.ts` (Tenant, TrainerProfile, Service, Booking, Package, Voucher, Payment, Availability, AvailabilityException, Client, UserRoleDoc + helpery)
-- ✅ AuthContext + TenantContext + guards (ProtectedRoute, TrainerRoute, AdminRoute) — port z fundacjalovevibe-be, zgeneralizowane na role bookingapp
-- ✅ Hooki: `useAuth`, `useTenant`, `useAvailability`, `useBookings`
-- ✅ Komponenty bookingowe sportowane z kettleforce + zaadaptowane do nowych typow:
-  `WeeklyCalendar`, `BookingForm`, `BookingConfirmation`, `ServicePicker`
-- ✅ Komponenty publiczne: `TenantHero`, `PartnerClubCard`, `AchievementsList`, `GiftVoucherCTA`
-- ✅ Komponenty dashboard: `BookingCard`, `BookingDetailsModal` (refactored `therapist*` → `trainer*`)
-- ✅ AvailabilityManager — port z fundacjalovevibe-be, nowy model dni tygodnia (`mon|tue|...`) + scalanie godzinowych blokow w `TimeSlot[]`
-- ✅ GoogleCalendarConnect (stub do Tydzien 2)
-- ✅ Strony: `HomePage`, `TenantPage` (renderuje live z Firestore), `VoucherPurchasePage` (stub), `VoucherRedeemPage` (stub), `ConfirmationPage` (stub), `Login`, `Dashboard`
-- ✅ Logika slotow: `src/lib/slots.ts::computeSlots()` — generuje sloty z Availability + duration, usuwa kolizje z bookingami
-- ✅ Firebase init: `firebase.json`, `.firebaserc` (`bookingapp-dev`/`bookingapp-prod`), `firestore.rules` (multi-tenant izolacja z planu), `firestore.indexes.json`
-- ✅ Functions skeleton: `functions/src/index.ts` + `config.ts` (region `europe-central2`, eksporty zakomentowane)
-- ✅ Seed Milosza: `scripts/seed-milosz.ts` (tworzy tenant + trainer + 4 uslugi: 1-on-1, group MMA, sparring, boks)
+## Live URLs
+- **Dev:** https://bookingapp-dev.web.app/b/milosz-mma (HTTP 200, z danymi)
+- **Prod:** https://bookingapp-prod.web.app (hosting only, brak danych)
+- **GitHub:** https://github.com/mike88pas/bookingapp
 
-## Buildy zielone
+## Co dziala — Tydzien 1 (Foundation)
+- ✅ npm workspaces (`./`, `packages/shared-types/`, `functions/`)
+- ✅ Vite 7 + React 19 + TS 5.9 + Tailwind v4 + RRv7
+- ✅ Pelny data model w `packages/shared-types/src/index.ts`
+- ✅ AuthContext + TenantContext + guards (role-based)
+- ✅ Hooki: useAuth, useTenant, useAvailability, useBookings
+- ✅ Firebase: firestore.rules (multi-tenant), indexes, region europe-central2
+- ✅ Seed Milosza uruchomiony na bookingapp-dev (tenant + trainer + 4 uslugi)
+
+## Co dziala — Tydzien 2 (Booking + Payments + Calendar)
+- ✅ `createCheckoutSession` — Stripe Connect, 15% fee, card/p24/blik, mode booking+package
+- ✅ `stripeWebhook` — payment_intent.succeeded/failed → booking confirmed + payment doc
+- ✅ `onBookingChange` trigger — confirmed → Google Calendar event + email PL, cancelled → delete + email
+- ✅ Google Calendar OAuth — googleCalendarAuthStart + googleCalendarCallback (port fundacjalovevibe-be)
+- ✅ Email sender Resend + PL templates (confirmed, cancelled, reminder)
+- ✅ BookingForm submit → createBookingAndCheckout → Stripe Checkout redirect
+- ✅ ConfirmationPage — pobiera booking po ID, renderuje status
+- ✅ PackagePicker — 3 tiers (5x/10x/20x) z rabatem + Stripe checkout
+
+## Co dziala — CAGE Redesign (design + copy)
+- ✅ **Design "CAGE"** — brutalny, geometryczny, premium dark, motyw oktagon/klatka
+- ✅ Font Oswald (display) + Inter (body), Google Fonts
+- ✅ **HeroSection** — full viewport, particle field (canvas 60 czasteczek), gradient orbs (Apple-style), animated gradient text, octagon decoration, scan line, trust bar, 2 CTA z smooth scroll
+- ✅ **StatsBar** — 4 kolumny z CountUp animacja (rekord MMA, ranking PL, walk w klatce, lat na macie)
+- ✅ **AboutSection** — split layout: bio w 1. osobie + FightRecord (7 walk, kolorowy border W/L, win rate bar)
+- ✅ **ServicePicker** — stagger animation, GlowCard (cursor-following spotlight), glow-border na hover, shimmer badge "Popularne"
+- ✅ **BookingSection** — 3-step progress bar (Trening > Termin > Dane), smooth auto-scroll miedzy krokami
+- ✅ **WeeklyCalendar** — animated column entrance, brand-500 shadow na selected slot
+- ✅ **BookingForm** — glassmorphism, border-l accent na slot summary, uppercase submit
+- ✅ **PackagePicker** — 3 tier cards, srodkowa wyrosniona (scale-105, shimmer "NAJPOPULARNIEJSZY"), zlota korona na 20x
+- ✅ **GiftVoucherCTA** — "Prezent, ktory zostaje w ciele", pulse glow, emotional copy
+- ✅ **PartnerClubCard** — MMA Krosno, "Tu sie zaczela moja droga"
+- ✅ **FooterSection** — social links, anchor scroll CTA
+- ✅ **DiagonalDivider** — clip-path cięcia miedzy sekcjami (nie wave)
+- ✅ **NoiseTexture** — SVG noise overlay na calej stronie
+- ✅ **Copywriting PL** — world-class copy: "Trener, ktory wchodzi do klatki", bio w 1. osobie, emocjonalne CTA
+
+## UI Primitives (src/components/ui/)
+- AnimatedSection — viewport-triggered motion wrapper
+- StaggerGrid — stagger container + item
+- CountUp — animated number counter
+- DiagonalDivider — CSS clip-path diagonal section divider
+- NoiseTexture — SVG noise texture overlay
+- BookingProgress — 3-step progress indicator
+- ParticleField — canvas particle network (60 czasteczek + linie polaczen)
+- GradientOrbs — Apple-style animated gradient orbs
+- GlowCard — cursor-following glow spotlight
+
+## Dane w Firestore (bookingapp-dev)
+- `tenants/milosz-mma` — slug, displayName, partnerClub MMA Krosno, brandColor #e63946
+- `trainers/milosz` — name, role, category mma, specjalizacje, achievements, bio
+- `services/svc-1on1` — Trening indywidualny 1-on-1, 180 PLN, 60 min
+- `services/svc-group-mma` — Grupowy trening MMA, 70 PLN, 90 min, max 12
+- `services/svc-sparring` — Sparring kontrolowany, 120 PLN, 60 min
+- `services/svc-boks` — Trening boksu 1-on-1, 150 PLN, 60 min
+
+## Buildy
 ```
 npx tsc -b                 ✅
-npx vite build             ✅
+npx vite build             ✅ (756 KB → 238 KB gzip)
 cd functions && npx tsc    ✅
 ```
 
-## Stan deploy
-- ✅ Projekty Firebase utworzone przez CLI:
-  - `bookingapp-dev` → https://bookingapp-dev.web.app (HTTP 200)
-  - `bookingapp-prod` → https://bookingapp-prod.web.app (HTTP 200)
-- ✅ `firestore.rules` + `firestore.indexes.json` zdeployowane na oba projekty
-- ✅ `dist/` (build Vite) zdeployowany na hosting na oba
-- ⚠️  **Functions NIE zdeployowane** — wymagaja Blaze plan + brak jeszcze tresci (tylko healthCheck stub). Do Tydzien 2.
-- ⚠️  **Firestore w trybie test mode (rules naszych dziala)** — Authentication i Firestore Database utworzone automatycznie
-- ⚠️  **Brak `.env.local`** — front laduje sie ale crashuje przy probie polaczenia z Firebase. Trzeba wkleic web config.
-
-## Co trzeba zrobic recznie zanim `/b/milosz-mma` zacznie dzialac na zywo
-1. **Pobrac web config** z https://console.firebase.google.com/project/bookingapp-dev/settings/general (sekcja "Your apps" → "Add app" → web → zarejestruj app)
-2. Skopiowac `.env.example` → `.env.local` i wpisac wartosci z konsoli (apiKey, messagingSenderId, appId)
-3. **Wlaczyc Email/Password sign-in** w https://console.firebase.google.com/project/bookingapp-dev/authentication/providers
-4. **Upgrade do Blaze plan** (wymagane do Functions) — TYLKO przed Tydzien 2 deploy. Hosting + Firestore dziala na Spark.
-5. **Uruchomic seed**: `npm run emulators` (w jednym terminalu), w drugim: `FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 npx tsx scripts/seed-milosz.ts`
-   ALBO seed bezposrednio na dev: `GOOGLE_APPLICATION_CREDENTIALS=<path-to-service-account.json> npx tsx scripts/seed-milosz.ts`
-6. `npm run dev` → otworzyc http://localhost:5173/b/milosz-mma
-
-## Tydzien 2 — TODO (Booking + Payments + Calendar)
-- [ ] **Stripe Connect setup**
-  - [ ] Utworzyc konto Stripe (test mode), zapisac `STRIPE_SECRET_KEY` jako Functions secret
-  - [ ] `functions/src/stripe/connect.ts` — `createConnectAccount`, `createOnboardingLink`
-  - [ ] `StripeConnectOnboard.tsx` w dashboardzie → Settings
-- [ ] **`createCheckoutSession` HTTP callable** (`functions/src/http/createCheckoutSession.ts`):
-  - input: `{ bookingId }`
-  - czyta booking, czyta tenant.stripeAccountId
-  - tworzy Stripe Checkout Session z `application_fee_amount = price * 0.15`, `payment_method_types: ['card', 'p24', 'blik']`
-  - zwraca `sessionUrl`
-- [ ] **`stripeWebhook` HTTP** (`functions/src/http/stripeWebhook.ts`):
-  - obsluga `payment_intent.succeeded` → update booking `confirmed`, create `payment` doc
-  - obsluga `payment_intent.payment_failed` → update booking `cancelled`, payment `failed`
-- [ ] **`onBookingChange` trigger** (`functions/src/triggers/onBookingChange.ts`) — port z fundacjalovevibe-be:
-  - na status confirmed: utworz Google Calendar event + wyslij email PL
-  - na status cancelled: usun event + wyslij email cancellation
-- [ ] **Google OAuth flow**:
-  - `functions/src/http/googleOAuth.ts` — port z fundacjalovevibe-be
-  - przycisk "Polacz Google Calendar" w GoogleCalendarConnect.tsx → otwiera flow → zapisuje `googleRefreshToken` (encrypted)
-- [ ] **`functions/src/calendar/events.ts`** — port 1:1 z fundacjalovevibe-be (`createEvent`, `updateEvent`, `deleteEvent`, `createMeetLink`)
-- [ ] **Email sender** — `functions/src/email/sendEmail.ts` (Resend API), templates PL: `bookingConfirmed.ts`, `cancelled.ts`
-- [ ] **BookingForm submit handler** (`TenantPage.tsx`):
-  - utworz `booking{status:pending_payment}` w Firestore
-  - wywolaj `httpsCallable('createCheckoutSession')` → redirect do `sessionUrl`
-- [ ] **`ConfirmationPage`** — pobierz booking po `bookingId`, pokaz `BookingConfirmation` lub stan failed
-- [ ] **Pakiety**:
-  - `PackagePicker.tsx` na TenantPage
-  - `createCheckoutSession` z `mode: 'package'` → po platnosci tworzy `package{status:active, expiresAt:+60d}`
-  - Booking z aktywnym pakietem: `paymentMethod:'package'`, dec `usedSessions` (transaction)
+## Co trzeba zrobic recznie (blokery przed pelnym flow)
+1. **Firebase Auth Email/Password** — wlaczyc w konsoli: https://console.firebase.google.com/project/bookingapp-dev/authentication/providers
+2. **Blaze plan** na bookingapp-dev (wymagany do Functions deploy)
+3. **Secrets** przed deploy functions:
+   ```bash
+   firebase functions:secrets:set STRIPE_SECRET_KEY --project bookingapp-dev
+   firebase functions:secrets:set STRIPE_WEBHOOK_SECRET --project bookingapp-dev
+   firebase functions:secrets:set RESEND_API_KEY --project bookingapp-dev
+   firebase functions:secrets:set GOOGLE_CLIENT_ID --project bookingapp-dev
+   firebase functions:secrets:set GOOGLE_CLIENT_SECRET --project bookingapp-dev
+   ```
+4. **Deploy functions:** `firebase deploy --only functions --project bookingapp-dev`
+5. **Stripe webhook URL:** dodac w Stripe Dashboard
+6. **Stripe Connect:** wpisac `stripeAccountId` do `tenants/milosz-mma`
 
 ## Tydzien 3 — TODO (Vouchers + Dashboard + Reminders + Deploy)
-- [ ] **Vouchery** (`createVoucherCheckout`, `onVoucherCreate` trigger, `VoucherPurchaseForm`, `VoucherRedeemPage`)
-- [ ] **Generator kodu**: `functions/src/lib/codeGen.ts` (8-char base32)
-- [ ] **Trainer dashboard**: TodaySchedule, lista bookingow z filtrem, CRUD services, AvailabilityManager hookup, lista pakietow+voucherow, lista klientow
-- [ ] **Email reminders cron**: `functions/src/scheduled/emailReminderDispatch.ts` (co 15 min, 24h + 2h przed)
-- [ ] **`packageExpiryCheck` cron** (codziennie)
-- [ ] **PWA**: manifest + service worker + ikona
-- [ ] **Deploy**: `bookingapp-dev.web.app` + `bookingapp-prod.web.app`
-
-## Open questions (z planu, do rozstrzygniecia)
-1. Czy Milosz ma konto Stripe? Potrzebny onboarding ~15 min.
-2. Email sender: **Resend** (rekomendacja) vs SendGrid?
-3. Voucher code format: 8 znakow base32 (rekomendacja)
-4. Voucher expiry default: **12 mies.**?
-5. Package expiry: **60 dni + rollover 3 sesji**?
-6. Cancellation policy: **24h pelny refund, <24h 0%**?
-7. MMA Krosno: jakie info do PartnerClubCard? (logo, adres, URL)
-
-## Krytyczne pliki referencyjne (Tydzien 2)
-- `c:\Users\mikep\fundacjalovevibe\fundacjalovevibe-be\functions\src\triggers\onBookingChange.ts`
-- `c:\Users\mikep\fundacjalovevibe\fundacjalovevibe-be\functions\src\calendar\events.ts` + `auth.ts`
-- `c:\Users\mikep\fundacjalovevibe\fundacjalovevibe-be\functions\src\email\sendEmail.ts` + `templates.ts`
+- [ ] Vouchery (createVoucherCheckout, onVoucherCreate trigger, VoucherPurchaseForm, VoucherRedeemPage)
+- [ ] Generator kodu: functions/src/lib/codeGen.ts (8-char base32)
+- [ ] Trainer dashboard: TodaySchedule, CRUD services, AvailabilityManager hookup, lista klientow
+- [ ] Email reminders cron: emailReminderDispatch.ts (co 15 min, 24h + 2h przed)
+- [ ] packageExpiryCheck cron (codziennie)
+- [ ] PWA: manifest + service worker + ikona
+- [ ] Availability seeding (aktualnie brak slotow — trzeba dodac availability docs zeby kalendarz pokazywal terminy)
+- [ ] Final deploy: bookingapp-dev.web.app + bookingapp-prod.web.app
