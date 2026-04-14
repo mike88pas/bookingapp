@@ -16,7 +16,7 @@ export function FooterSection({ onBookClick }: FooterSectionProps) {
               Milosz Kornasiewicz
             </p>
             <p className="text-xs text-white/30 mt-1">
-              Trener MMA &bull; Zawodnik QUEST MMA &bull; Krosno
+              Trener MMA &bull; Zawodnik MMA &bull; Krosno
             </p>
             <p className="text-[10px] text-white/15 mt-2">
               &copy; 2026 &bull; Powered by bookingapp

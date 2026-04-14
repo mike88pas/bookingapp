@@ -16,17 +16,17 @@ export const FIGHT_RECORD: Fight[] = [
   { opponent: 'Przeciwnik 3', event: 'QUEST MMA', date: '2024', result: 'L', method: 'Decyzja' },
 ];
 
-export const MILOSZ_BIO_INTRO = 'Wchodze do klatki, zeby sie sprawdzic. Trenuje ludzi, zeby zmienili swoje zycie.';
+export const MILOSZ_BIO_INTRO = 'Wchodze do klatki, zeby sie sprawdzic. Trenuje ludzi, zeby zmienili swoje zycie na lepsze.';
 
-export const MILOSZ_BIO = `Rekord 4\u20133 w amatorskim MMA. Kategoria polciezka. Walcze w promocji QUEST MMA \u2014 jedynej gali sztuk walki w Krosnie.
+export const MILOSZ_BIO = `Rekord 4\u20133 w amatorskim MMA. Kategoria polciezka. 7 walk w klatce \u2014 kazda na oczach publicznosci w Krosnie.
 
 Ale ta strona nie jest o moich walkach. Jest o Twoich.
 
-Prowadze treningi personalne i grupowe w klubie MMA Krosno. Ucze MMA, boksu, grappingu i przygotowania fizycznego. Nie szukam klientow \u2014 szukam ludzi, ktorzy chca byc lepszą wersja siebie.
+Prowadze treningi personalne i grupowe w klubie MMA Krosno. Ucze MMA, boksu, grappingu i przygotowania fizycznego. Nie szukam klientow \u2014 szukam ludzi gotowych na zmiane.
 
 Kazdy kto wchodzi na mate dostaje to samo: pelen szacunek, zero taryfy ulgowej i plan, ktory dziala. Bez znaczenia czy walczysz amatorsko, czy pierwszy raz zakladasz rekawice.`;
 
-export const MILOSZ_TAGLINE = 'Trener, ktory wchodzi do klatki. I nauczy Cie to samo.';
+export const MILOSZ_TAGLINE = 'Walcze zawodowo. Trenuje personalnie. Zmieniam ludzi.';
 
 export const SOCIAL_LINKS = {
   instagram: 'https://instagram.com/milosz_wp',

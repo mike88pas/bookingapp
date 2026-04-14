@@ -54,7 +54,7 @@ export function AboutSection() {
           <AnimatedSection direction="right" delay={0.25}>
             <div>
               <h3 className="text-xs uppercase tracking-[0.2em] text-white/40 mb-4">
-                Historia walk &mdash; QUEST MMA
+                Historia walk
               </h3>
               <FightRecord />
             </div>

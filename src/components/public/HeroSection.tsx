@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
-import { ChevronDown, Shield, Award, Instagram } from 'lucide-react';
-import { MILOSZ_TAGLINE, RECORD_SUMMARY, SOCIAL_LINKS } from '@/lib/milosz-data';
+import { ChevronDown, Shield, Dumbbell, Instagram } from 'lucide-react';
+import { MILOSZ_TAGLINE, SOCIAL_LINKS } from '@/lib/milosz-data';
 import { ParticleField } from '@/components/ui/ParticleField';
 import { GradientOrbs } from '@/components/ui/GradientOrbs';
 import type { Tenant, TrainerProfile } from '@bookingapp/shared-types';
@@ -32,7 +32,6 @@ export function HeroSection({
   onAboutClick,
 }: HeroSectionProps) {
   const name = trainer?.name ?? 'Trener';
-  const record = `${RECORD_SUMMARY.wins}-${RECORD_SUMMARY.losses}`;
 
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-[#080808] scan-line">
@@ -48,12 +47,6 @@ export function HeroSection({
       <div className="absolute inset-0 pointer-events-none">
         {/* Octagon decoration */}
         <div className="absolute top-1/2 right-[10%] -translate-y-1/2 w-[500px] h-[500px] md:w-[700px] md:h-[700px] octagon-outline border-2 border-brand-500/[0.06] opacity-50" />
-        {/* Giant record number */}
-        <div className="absolute top-1/2 right-[5%] -translate-y-1/2 select-none">
-          <span className="text-[180px] md:text-[280px] font-display font-bold text-white/[0.02] leading-none">
-            {record}
-          </span>
-        </div>
         {/* Dot grid */}
         <div
           className="absolute inset-0 opacity-[0.025]"
@@ -67,13 +60,13 @@ export function HeroSection({
       </div>
 
       {/* Content */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20">
-        <div className="max-w-2xl">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div>
           {/* Badge */}
           <motion.div {...slideLeft(0.1)}>
             <span className="inline-flex items-center gap-2 px-4 py-1.5 border border-brand-500/30 bg-brand-500/[0.06] backdrop-blur-sm rounded text-[11px] uppercase tracking-[0.2em] text-brand-400 font-medium">
-              <Award className="w-3.5 h-3.5" />
-              QUEST MMA &bull; #13 w Polsce
+              <Dumbbell className="w-3.5 h-3.5" />
+              TRENER PERSONALNY
             </span>
           </motion.div>
 
@@ -97,7 +90,7 @@ export function HeroSection({
             {...fadeIn(0.4)}
             className="mt-4 text-lg md:text-xl uppercase tracking-[0.15em] text-white/40 font-display"
           >
-            Trener MMA &bull; Zawodnik QUEST MMA &bull; Krosno
+            Trener MMA &bull; Zawodnik MMA &bull; Krosno
           </motion.p>
 
           {/* Tagline */}
@@ -113,7 +106,7 @@ export function HeroSection({
             {...fadeIn(0.6)}
             className="mt-2 text-xs text-white/30"
           >
-            Rekord 4-3 &bull; #13 w rankingu Polski &bull; Klub MMA Krosno od 2013
+            7 walk w klatce &bull; 10+ lat na macie &bull; MMA Krosno
           </motion.p>
 
           {/* CTAs */}
@@ -154,6 +147,25 @@ export function HeroSection({
             </a>
           </motion.div>
         </div>
+
+        {/* Hero image — right column (desktop only) */}
+        <motion.div
+          {...fadeIn(0.5)}
+          className="hidden lg:flex justify-center items-center"
+        >
+          <div className="relative">
+            <img
+              src="/images/milosz-hero.webp"
+              alt="Milosz Kornasiewicz — Trener MMA"
+              className="relative z-10 w-full max-w-md object-cover rounded-lg"
+              onError={(e) => {
+                (e.target as HTMLImageElement).parentElement!.style.display = 'none';
+              }}
+            />
+            {/* Red gradient glow behind image */}
+            <div className="absolute inset-0 bg-brand-500/20 blur-3xl rounded-full -z-0 scale-110" />
+          </div>
+        </motion.div>
       </div>
 
       {/* Scroll indicator */}

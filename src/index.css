@@ -1,11 +1,11 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-brand-50: #fff1f1;
-  --color-brand-100: #ffe1e1;
-  --color-brand-200: #ffc7c7;
-  --color-brand-300: #ffa0a0;
-  --color-brand-400: #ff6b6b;
+  --color-brand-50: #fef2f2;
+  --color-brand-100: #fee2e2;
+  --color-brand-200: #fecaca;
+  --color-brand-300: #f87171;
+  --color-brand-400: #ef4444;
   --color-brand-500: #e63946;
   --color-brand-600: #c22631;
   --color-brand-700: #a11d26;
@@ -95,7 +95,7 @@ body {
 
 /* Animated text gradient */
 .text-gradient-animate {
-  background: linear-gradient(90deg, #e63946, #ff6b6b, #e63946);
+  background: linear-gradient(90deg, #e63946, #ef4444, #e63946);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
@@ -105,7 +105,7 @@ body {
 
 /* Static brand gradient text */
 .text-gradient-brand {
-  background: linear-gradient(135deg, #e63946, #ff6b6b);
+  background: linear-gradient(135deg, #e63946, #ef4444);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
