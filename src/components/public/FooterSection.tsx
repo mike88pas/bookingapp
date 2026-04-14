@@ -19,7 +19,10 @@ export function FooterSection({ onBookClick }: FooterSectionProps) {
               Trener MMA &bull; Zawodnik MMA &bull; Krosno
             </p>
             <p className="text-[10px] text-white/15 mt-2">
-              &copy; 2026 &bull; Powered by bookingapp
+              &copy; 2026 &bull; Powered by{' '}
+              <a href="https://thebestagency.net" target="_blank" rel="noopener noreferrer" className="text-white/20 hover:text-white/40 transition-colors">
+                The Best Agency
+              </a>
             </p>
           </div>
 
