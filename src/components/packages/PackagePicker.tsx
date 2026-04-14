@@ -58,7 +58,7 @@ export function PackagePicker({ tenantId, trainerId, services }: PackagePickerPr
         purchasedAt: Timestamp.now(),
         expiresAt,
         price: totalPrice,
-        status: 'active',
+        status: 'pending_payment',
       });
       const callable = httpsCallable<
         { packageId: string; mode: string },

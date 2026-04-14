@@ -12,6 +12,8 @@ import type {
   Tenant,
   TrainerProfile,
   Service,
+  Availability,
+  DayOfWeek,
 } from '../packages/shared-types/src/index';
 
 const USE_EMULATOR = process.env.FIRESTORE_EMULATOR_HOST != null;
@@ -136,13 +138,40 @@ async function seed() {
     },
   ];
 
+  // Availability — pon-pt 09:00-12:00 + 15:00-19:00, sob 10:00-14:00
+  const weekdaySlots = [
+    { start: '09:00', end: '12:00' },
+    { start: '15:00', end: '19:00' },
+  ];
+  const saturdaySlots = [{ start: '10:00', end: '14:00' }];
+  const days: { dow: DayOfWeek; slots: { start: string; end: string }[]; active: boolean }[] = [
+    { dow: 'mon', slots: weekdaySlots, active: true },
+    { dow: 'tue', slots: weekdaySlots, active: true },
+    { dow: 'wed', slots: weekdaySlots, active: true },
+    { dow: 'thu', slots: weekdaySlots, active: true },
+    { dow: 'fri', slots: weekdaySlots, active: true },
+    { dow: 'sat', slots: saturdaySlots, active: true },
+    { dow: 'sun', slots: [], active: false },
+  ];
+
   await db.collection('tenants').doc(tenantId).set(tenant);
   await db.collection('trainers').doc(trainerId).set(trainer);
   for (const s of services) {
     await db.collection('services').doc(s.id).set(s);
   }
+  for (const d of days) {
+    const avail: Availability = {
+      id: `${trainerId}_${d.dow}`,
+      tenantId,
+      trainerId,
+      dayOfWeek: d.dow,
+      slots: d.slots,
+      active: d.active,
+    };
+    await db.collection('availability').doc(avail.id).set(avail);
+  }
 
-  console.log('Seed OK: tenant + trainer + 4 services');
+  console.log('Seed OK: tenant + trainer + 4 services + 7 availability days');
 }
 
 seed().catch((e) => {

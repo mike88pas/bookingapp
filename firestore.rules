@@ -61,7 +61,9 @@ service cloud.firestore {
 
     match /packages/{id} {
       allow read: if isTenantMember(resource.data.tenantId);
-      allow write: if isTenantMember(resource.data.tenantId);
+      allow create: if sameTenant(request.resource.data.tenantId)
+                    && request.resource.data.status == 'pending_payment';
+      allow update, delete: if isTenantMember(resource.data.tenantId);
     }
 
     match /vouchers/{id} {
